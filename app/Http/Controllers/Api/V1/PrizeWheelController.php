@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Services\PrizeWheelService;
+use App\Services\PrizeWheelSettingService;
 use App\Services\PrizeWheelUserService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
@@ -16,14 +17,21 @@ class PrizeWheelController extends ApiController
 
     protected PrizeWheelUserService $prizeWheelUserService;
 
+    protected PrizeWheelSettingService $prizeWheelSettingService;
+
+
     /**
      * @param PrizeWheelService $prizeWheelService
      * @param PrizeWheelUserService $prizeWheelUserService
+     * @param PrizeWheelSettingService $prizeWheelSettingService
      */
-    public function __construct(PrizeWheelService $prizeWheelService, PrizeWheelUserService $prizeWheelUserService)
+    public function __construct(PrizeWheelService        $prizeWheelService,
+                                PrizeWheelUserService    $prizeWheelUserService,
+                                PrizeWheelSettingService $prizeWheelSettingService)
     {
         $this->prizeWheelService = $prizeWheelService;
         $this->prizeWheelUserService = $prizeWheelUserService;
+        $this->prizeWheelSettingService = $prizeWheelSettingService;
     }
 
     /**
@@ -59,9 +67,18 @@ class PrizeWheelController extends ApiController
      */
     public function store(Request $request): JsonResponse
     {
+        $send = false;
         $prizeWheel = $this->prizeWheelUserService->create($request->all());
+        $prizeWheelSetting = $this->prizeWheelSettingService->first();
+
+        if ($prizeWheelSetting && $prizeWheelSetting->auto_messenger) {
+           $send = $this->prizeWheelUserService->sendMessenger($prizeWheel, $prizeWheelSetting);
+        }
         return $this->sendSuccess(
-            $prizeWheel,
+            [
+                'prize_wheel' => $prizeWheel,
+                'send' => $send
+            ],
             'Prize Wheel saved successfully.',
             Response::HTTP_CREATED
         );

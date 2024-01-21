@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('tjc.home')->middleware('localization');
 // change language
 Route::get('/language/{language}', [\App\Http\Controllers\LanguageController::class, 'LanguageSwitch'])->name('tjc.language');
+// webhook messenger
+Route::get('/webhook', [\App\Http\Controllers\WebhookController::class, 'verify'])->name('tjc.webhook');
+
+//callback login facebook
+Route::get('/callback', [\App\Http\Controllers\WebhookController::class, 'verify'])->name('tjc.callback');

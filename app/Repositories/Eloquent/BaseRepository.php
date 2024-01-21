@@ -268,4 +268,12 @@ abstract class BaseRepository
         $query = $this->model->query();
         return $query->where($where)->count();
     }
+
+    /**
+     * @return Model
+     */
+    public function first(): Model
+    {
+        return $this->model->query()->first();
+    }
 }

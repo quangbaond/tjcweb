@@ -100,5 +100,13 @@ class BaseService
     {
         return $this->repository->all();
     }
+
+    /**
+     * @return Model
+     */
+    public function first(): Model
+    {
+        return $this->repository->first();
+    }
 }
 
