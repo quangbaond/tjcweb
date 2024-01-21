@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ApiController;
 use App\Services\PrizeWheelService;
 use App\Services\PrizeWheelSettingService;
 use App\Services\PrizeWheelUserService;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -64,6 +65,7 @@ class PrizeWheelController extends ApiController
     /**
      * @param Request $request
      * @return JsonResponse
+     * @throws GuzzleException
      */
     public function store(Request $request): JsonResponse
     {
@@ -74,13 +76,25 @@ class PrizeWheelController extends ApiController
         if ($prizeWheelSetting && $prizeWheelSetting->auto_messenger) {
            $send = $this->prizeWheelUserService->sendMessenger($prizeWheel, $prizeWheelSetting);
         }
+        if ($send) {
+            return $this->sendSuccess(
+                [
+                    'prize_wheel' => $prizeWheel,
+                    'send' => $send
+                ],
+                'Prize Wheel saved successfully.',
+                Response::HTTP_CREATED
+            );
+        }
+
         return $this->sendSuccess(
             [
                 'prize_wheel' => $prizeWheel,
                 'send' => $send
             ],
             'Prize Wheel saved successfully.',
-            Response::HTTP_CREATED
+            Response::HTTP_BAD_REQUEST
         );
+
     }
 }

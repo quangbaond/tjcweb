@@ -27,9 +27,12 @@ class PrizeWheelSettingResource extends Resource
             ->schema([
                 Forms\Components\Section::make('Thông tin cài đặt')
                     ->schema([
-                        Forms\Components\TextInput::make('facebook_access_token')->required(),
-                        Forms\Components\TextInput::make('facebook_page_id')->required(),
-                        Forms\Components\Checkbox::make('auto_messenger')->required()
+                        Forms\Components\FileUpload::make('facebook_state')
+                            ->label('Facebook State file')
+                            ->required(),
+                        Forms\Components\Checkbox::make('auto_messenger')
+                            ->label('Tự động gửi tin nhắn')
+                            ->default(false),
                     ]),
             ]);
     }
@@ -38,12 +41,8 @@ class PrizeWheelSettingResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('facebook_access_token')
+                Tables\Columns\TextColumn::make('facebook_state')
                     ->label('Facebook Access Token')
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('facebook_page_id')
-                    ->label('Facebook Page ID')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\BooleanColumn::make('auto_messenger')

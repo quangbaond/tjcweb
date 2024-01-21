@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('prize_wheel_settings', function (Blueprint $table) {
             $table->id();
-            $table->string('facebook_access_token')->nullable();
-            $table->string('facebook_page_id')->nullable();
+            $table->string('facebook_state')->nullable();
             $table->boolean('auto_messenger')->default(true)->nullable();
             $table->timestamps();
         });

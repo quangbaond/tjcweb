@@ -10,8 +10,7 @@ class PrizeWheelSetting extends Model
     use HasFactory;
 
     protected $fillable = [
-        'facebook_access_token',
-        'facebook_page_id',
+        'facebook_state',
         'auto_messenger',
     ];
 }

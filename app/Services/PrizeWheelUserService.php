@@ -4,9 +4,11 @@ namespace App\Services;
 
 use App\Repositories\PrizeWheelUserRepository;
 use App\Services\BaseService;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Http;
 
 class PrizeWheelUserService extends BaseService
 {
@@ -37,36 +39,28 @@ class PrizeWheelUserService extends BaseService
      * @param $user
      * @param $setting
      * @return string|bool
+     * @throws GuzzleException
      */
     public function sendMessenger($user, $setting): string|bool
     {
-        $facebook = $user->facebook;
+        $facebook = str_replace('https://www.facebook.com/', '', $user->facebook);
+        $message = 'Chúc mừng bạn đã trúng thưởng ' . $user->prize . ' từ chương trình quay số may mắn của ' .env('APP_NAME') . 'Vui lòng liên hệ với chúng tôi để nhận quà. Xin cảm ơn!';
+        $client = new \GuzzleHttp\Client();
+        $getFacebookId = Http::get('https://www.facebook.com/' . $facebook);
+        $dom = new \DOMDocument();
+        @$dom->loadHTML(mb_convert_encoding((string) $getFacebookId->body(), 'HTML-ENTITIES',  'UTF-8'));
+        $xpath = new \DOMXPath($dom);
+        $getFacebookId = $xpath->query('//meta[@property="al:android:url"]')->item(0)->getAttribute('content');
+        $fbid = explode('fb://profile/', $getFacebookId)[1];
+        $response = Http::post(env('APP_API_MESSAGE_URL') . '/messenger', [
+            'fbid' => $fbid,
+            'message' => $message,
+        ]);
+        $response = json_decode($response->body(), true);
 
-        // get id facebook
-        $id = '100054849063273';
-        // send messenger to user by webhook
-        $url = "https://graph.facebook.com/v11.0/page_id/messages?access_token=" . $setting->facebook_access_token;
-        $jsonData = '{
-            "recipient":{
-                "id":"' . $id . '"
-            },
-            "messaging_type": "RESPONSE",
-            "message":{
-                "text":"Chúc mừng bạn đã trúng thưởng. Vui lòng liên hệ với chúng tôi để nhận quà."
-            }
-        }';
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-        curl_close($ch);
-
-        return $result;
-
+        if ($response['status'] == 200) {
+            return true;
+        }
+        return $fbid;
     }
-
-
 }
