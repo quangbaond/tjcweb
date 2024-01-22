@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('fill_color');
             $table->string('text_color');
             $table->string('image')->nullable();
+            $table->integer('probability')->default(10)->nullable();
             $table->timestamps();
         });
     }

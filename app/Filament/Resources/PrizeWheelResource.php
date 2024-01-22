@@ -29,11 +29,18 @@ class PrizeWheelResource extends Resource
                 ->schema([
                     Forms\Components\TextInput::make('name')
                         ->autofocus()
+                        ->label('Tên giải thưởng')
                         ->required()
                         ->maxValue(255)
                         ->placeholder('Tên giải thưởng'),
+                    Forms\Components\TextInput::make('probability')
+                        ->default(10)
+                        ->numeric()
+                        ->suffix('%')
+                        ->label('Xác suất'),
                     Forms\Components\Textarea::make('description')
                         ->required(false)
+                        ->columnSpan(2)
                         ->placeholder('Mô tả giải thưởng'),
                     Forms\Components\ColorPicker::make('fill_color')
                         ->default('#ffffff')
@@ -41,7 +48,8 @@ class PrizeWheelResource extends Resource
                     Forms\Components\ColorPicker::make('text_color')
                         ->default('#000000')
                         ->label('Màu chữ'),
-                ])
+
+                ])->columns(2),
             ]);
     }
 
@@ -65,6 +73,11 @@ class PrizeWheelResource extends Resource
                     ->label('Màu chữ')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('probability')
+                    ->label('Xác suất')
+                    ->formatStateUsing(fn (int $state) => $state . '%')
+                    ->searchable()
+                    ->sortable(),
             ])
             ->filters([
                 //
@@ -75,6 +88,7 @@ class PrizeWheelResource extends Resource
                     Tables\Actions\DeleteAction::make(),
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\Action::make('Nhân bản')
+                        ->icon('heroicon-o-clipboard-document')
                         ->action(fn (PrizeWheel $record) => $record->replicate()->save()),
                 ]),
             ])
