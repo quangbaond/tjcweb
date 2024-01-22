@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('text_color');
             $table->string('image')->nullable();
             $table->integer('probability')->default(10)->nullable();
+            $table->boolean('is_win')->default(true)->nullable();
             $table->timestamps();
         });
     }

@@ -48,6 +48,8 @@ class PrizeWheelResource extends Resource
                     Forms\Components\ColorPicker::make('text_color')
                         ->default('#000000')
                         ->label('Màu chữ'),
+                    Forms\Components\Toggle::make('is_win')
+                        ->label('Có thể trúng'),
 
                 ])->columns(2),
             ]);
@@ -77,6 +79,9 @@ class PrizeWheelResource extends Resource
                     ->label('Xác suất')
                     ->formatStateUsing(fn (int $state) => $state . '%')
                     ->searchable()
+                    ->sortable(),
+                Tables\Columns\BooleanColumn::make('is_win')
+                    ->label('Có thể trúng')
                     ->sortable(),
             ])
             ->filters([

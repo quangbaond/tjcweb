@@ -16,5 +16,6 @@ class PrizeWheel extends Model
         'text_color',
         'image',
         'probability',
+        'is_win',
     ];
 }
