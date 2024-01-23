@@ -17,5 +17,11 @@ class PrizeWheel extends Model
         'image',
         'probability',
         'is_win',
+        'event_id',
     ];
+
+    public function event()
+    {
+        return $this->belongsTo(PrizeWheelEvent::class);
+    }
 }

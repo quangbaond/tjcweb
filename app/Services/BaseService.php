@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\Repositories\Eloquent\BaseRepository;
@@ -29,7 +30,7 @@ class BaseService
      * @param array|string|null $withCount
      * @return Model
      */
-    public function find(int $id, array|string $columns = ['*'] , array $with = null, array|string|null $withCount = null) :Model
+    public function find(int $id, array|string $columns = ['*'], array $with = null, array|string|null $withCount = null): Model
     {
         return $this->repository->find($id, $columns, $with, $withCount);
     }
@@ -41,7 +42,7 @@ class BaseService
      * @return \Illuminate\Database\Eloquent\Builder
      * @throws ExceptionAlias
      */
-    public function findBy(array|string $columns) : \Illuminate\Database\Eloquent\Builder
+    public function findBy(array|string $columns): \Illuminate\Database\Eloquent\Builder
     {
         return $this->repository->queryDefault($columns, null, null);
     }
@@ -53,7 +54,7 @@ class BaseService
      * @return bool
      * @throws ExceptionAlias
      */
-    public function update(array $data, int $id) : bool
+    public function update(array $data, int $id): bool
     {
         return $this->repository->update($data, $id);
     }
@@ -63,7 +64,7 @@ class BaseService
      * @return Model
      * @throws ExceptionAlias
      */
-    public function delete(int $id) : Model
+    public function delete(int $id): Model
     {
         return $this->repository->delete($id);
     }
@@ -72,7 +73,7 @@ class BaseService
      * @param array $data
      * @return Model
      */
-    public function create(array $data) : Model
+    public function create(array $data): Model
     {
         return $this->repository->create($data);
     }
@@ -108,5 +109,14 @@ class BaseService
     {
         return $this->repository->first();
     }
-}
 
+    /**
+     * @param array $data
+     * @return Model
+     */
+
+    public function findByField(array $where, array $columns = ['*'], array|string|null $with = null, array|string|null $withCount = null): Model|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Builder|array|null
+    {
+        return $this->repository->findByField($where, $columns, $with, $withCount);
+    }
+}

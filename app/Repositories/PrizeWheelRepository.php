@@ -2,8 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Repositories\Eloquent\BaseRepository;
-
 class PrizeWheelRepository extends Eloquent\BaseRepository
 {
 

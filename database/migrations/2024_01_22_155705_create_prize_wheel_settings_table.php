@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('prize_wheel_settings', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('event_id')->constrained('prize_wheel_events')->cascadeOnDelete();
             $table->string('facebook_state')->nullable();
+            $table->string('background_pc');
+            $table->string('background_mobile');
+            $table->string('background_wheel');
             $table->boolean('auto_messenger')->default(true)->nullable();
             $table->timestamps();
         });

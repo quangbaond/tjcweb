@@ -6,6 +6,7 @@ use App\Filament\Resources\PrizeWheelResource\Pages;
 use App\Filament\Resources\PrizeWheelResource\RelationManagers;
 use App\Models\PrizeWheel;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -26,32 +27,36 @@ class PrizeWheelResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Section::make('Thông tin giải thưởng')
-                ->schema([
-                    Forms\Components\TextInput::make('name')
-                        ->autofocus()
-                        ->label('Tên giải thưởng')
-                        ->required()
-                        ->maxValue(255)
-                        ->placeholder('Tên giải thưởng'),
-                    Forms\Components\TextInput::make('probability')
-                        ->default(10)
-                        ->numeric()
-                        ->suffix('%')
-                        ->label('Xác suất'),
-                    Forms\Components\Textarea::make('description')
-                        ->required(false)
-                        ->columnSpan(2)
-                        ->placeholder('Mô tả giải thưởng'),
-                    Forms\Components\ColorPicker::make('fill_color')
-                        ->default('#ffffff')
-                        ->label('Màu nền'),
-                    Forms\Components\ColorPicker::make('text_color')
-                        ->default('#000000')
-                        ->label('Màu chữ'),
-                    Forms\Components\Toggle::make('is_win')
-                        ->label('Có thể trúng'),
+                    ->schema([
+                        Select::make('event_id')
+                            ->relationship('event', 'name')
+                            ->label('Sự kiện')
+                            ->required(),
+                        Forms\Components\TextInput::make('name')
+                            ->autofocus()
+                            ->label('Tên giải thưởng')
+                            ->required()
+                            ->maxValue(255)
+                            ->placeholder('Tên giải thưởng'),
+                        Forms\Components\TextInput::make('probability')
+                            ->default(10)
+                            ->numeric()
+                            ->suffix('%')
+                            ->label('Xác suất'),
+                        Forms\Components\Textarea::make('description')
+                            ->required(false)
+                            ->columnSpan(2)
+                            ->placeholder('Mô tả giải thưởng'),
+                        Forms\Components\ColorPicker::make('fill_color')
+                            ->default('#ffffff')
+                            ->label('Màu nền'),
+                        Forms\Components\ColorPicker::make('text_color')
+                            ->default('#000000')
+                            ->label('Màu chữ'),
+                        Forms\Components\Toggle::make('is_win')
+                            ->label('Có thể trúng'),
 
-                ])->columns(2),
+                    ])->columns(2),
             ]);
     }
 
@@ -59,6 +64,10 @@ class PrizeWheelResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('event.name')
+                    ->label('Sự kiện')
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->label('Tên giải thưởng')
                     ->searchable()

@@ -11,15 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('prize_wheels', function (Blueprint $table) {
+        Schema::create('prize_wheel_events', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description')->nullable();
-            $table->string('fill_color');
-            $table->string('text_color');
-            $table->string('image')->nullable();
-            $table->integer('probability')->default(10)->nullable();
-            $table->boolean('is_win')->default(true)->nullable();
+            $table->string('slug');
+            $table->text('description')->nullable()->default(null);
             $table->timestamps();
         });
     }
@@ -29,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('prize_wheels');
+        Schema::dropIfExists('prize_wheel_events');
     }
 };

@@ -12,5 +12,14 @@ class PrizeWheelSetting extends Model
     protected $fillable = [
         'facebook_state',
         'auto_messenger',
+        'background_pc',
+        'background_mobile',
+        'background_wheel',
+        'event_id',
     ];
+
+    public function event()
+    {
+        return $this->belongsTo(PrizeWheelEvent::class);
+    }
 }

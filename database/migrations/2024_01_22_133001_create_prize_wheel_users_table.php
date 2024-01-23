@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('prize_wheel_users', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('event_id')->constrained('prize_wheel_events')->cascadeOnDelete();
             $table->string('phone');
             $table->string('prize')->nullable();
             $table->string('full_name');

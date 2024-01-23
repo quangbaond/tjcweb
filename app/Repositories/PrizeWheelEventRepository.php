@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-class PrizeWheelSettingRepository extends Eloquent\BaseRepository
+class PrizeWheelEventRepository extends Eloquent\BaseRepository
 {
 
     /**
@@ -10,6 +10,6 @@ class PrizeWheelSettingRepository extends Eloquent\BaseRepository
      */
     public function model(): string
     {
-        return \App\Models\PrizeWheelSetting::class;
+        return \App\Models\PrizeWheelEvent::class;
     }
 }

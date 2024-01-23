@@ -15,5 +15,11 @@ class PrizeWheelUser extends Model
         'full_name',
         'address',
         'facebook',
+        'event_id',
     ];
+
+    public function event()
+    {
+        return $this->belongsTo(PrizeWheelEvent::class);
+    }
 }

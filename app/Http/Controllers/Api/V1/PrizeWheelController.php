@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Api\ApiController;
+use App\Services\PrizeWheelEventService;
 use App\Services\PrizeWheelService;
 use App\Services\PrizeWheelSettingService;
 use App\Services\PrizeWheelUserService;
@@ -20,19 +21,25 @@ class PrizeWheelController extends ApiController
 
     protected PrizeWheelSettingService $prizeWheelSettingService;
 
+    protected PrizeWheelEventService $prizeWheelEventService;
+
 
     /**
      * @param PrizeWheelService $prizeWheelService
      * @param PrizeWheelUserService $prizeWheelUserService
      * @param PrizeWheelSettingService $prizeWheelSettingService
+     * @param PrizeWheelEventService $prizeWheelEventService
      */
-    public function __construct(PrizeWheelService        $prizeWheelService,
-                                PrizeWheelUserService    $prizeWheelUserService,
-                                PrizeWheelSettingService $prizeWheelSettingService)
-    {
+    public function __construct(
+        PrizeWheelService        $prizeWheelService,
+        PrizeWheelUserService    $prizeWheelUserService,
+        PrizeWheelSettingService $prizeWheelSettingService,
+        PrizeWheelEventService   $prizeWheelEventService
+    ) {
         $this->prizeWheelService = $prizeWheelService;
         $this->prizeWheelUserService = $prizeWheelUserService;
         $this->prizeWheelSettingService = $prizeWheelSettingService;
+        $this->prizeWheelEventService = $prizeWheelEventService;
     }
 
     /**
@@ -69,32 +76,32 @@ class PrizeWheelController extends ApiController
      */
     public function store(Request $request): JsonResponse
     {
-        $send = false;
         $prizeWheel = $this->prizeWheelUserService->create($request->all());
-        $prizeWheelSetting = $this->prizeWheelSettingService->first();
-
-        if ($prizeWheelSetting && $prizeWheelSetting->auto_messenger) {
-           $send = $this->prizeWheelUserService->sendMessenger($prizeWheel, $prizeWheelSetting);
-        }
-        if ($send) {
-            return $this->sendSuccess(
-                [
-                    'prize_wheel' => $prizeWheel,
-                    'send' => $send
-                ],
-                'Prize Wheel saved successfully.',
-                Response::HTTP_CREATED
-            );
-        }
 
         return $this->sendSuccess(
             [
                 'prize_wheel' => $prizeWheel,
-                'send' => $send
             ],
             'Prize Wheel saved successfully.',
-            Response::HTTP_BAD_REQUEST
+            Response::HTTP_CREATED
         );
+    }
 
+    /**
+     * @param $slug
+     * @return JsonResponse
+     */
+    public function getEvent($slug): JsonResponse
+    {
+        $event = $this->prizeWheelEventService->findByField(
+            ['slug' => $slug],
+            ['*'],
+            ['setting']
+        );
+        return $this->sendSuccess(
+            $event,
+            $event ? 'Setting retrieved successfully.' : 'Setting not found.',
+            $event ? Response::HTTP_OK : Response::HTTP_NOT_FOUND
+        );
     }
 }

@@ -6,6 +6,7 @@ use App\Filament\Resources\PrizeWheelUserResource\Pages;
 use App\Filament\Resources\PrizeWheelUserResource\RelationManagers;
 use App\Models\PrizeWheelUser;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -26,30 +27,35 @@ class PrizeWheelUserResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Section::make('Thông tin người dùng')
-                ->schema([
-                    Forms\Components\TextInput::make('phone')
-                        ->autofocus()
-                        ->required()
-                        ->maxValue(255)
-                        ->placeholder('Số điện thoại'),
-                    Forms\Components\TextInput::make('prize')
-                        ->autofocus()
-                        ->required()
-                        ->maxValue(255)
-                        ->placeholder('Giải thưởng'),
-                    Forms\Components\TextInput::make('full_name')
-                        ->required()
-                        ->maxValue(255)
-                        ->placeholder('Họ và tên'),
-                    Forms\Components\TextInput::make('address')
-                        ->required()
-                        ->maxValue(255)
-                        ->placeholder('Địa chỉ'),
-                    Forms\Components\TextInput::make('facebook')
-                        ->required()
-                        ->maxValue(255)
-                        ->placeholder('Facebook'),
-                ])
+                    ->schema([
+                        Select::make('event_id')
+                            ->relationship('event', 'name')
+                            ->label('Sự kiện')
+                            ->required(),
+
+                        Forms\Components\TextInput::make('phone')
+                            ->autofocus()
+                            ->required()
+                            ->maxValue(255)
+                            ->placeholder('Số điện thoại'),
+                        Forms\Components\TextInput::make('prize')
+                            ->autofocus()
+                            ->required()
+                            ->maxValue(255)
+                            ->placeholder('Giải thưởng'),
+                        Forms\Components\TextInput::make('full_name')
+                            ->required()
+                            ->maxValue(255)
+                            ->placeholder('Họ và tên'),
+                        Forms\Components\TextInput::make('address')
+                            ->required()
+                            ->maxValue(255)
+                            ->placeholder('Địa chỉ'),
+                        Forms\Components\TextInput::make('facebook')
+                            ->required()
+                            ->maxValue(255)
+                            ->placeholder('Facebook'),
+                    ])
             ]);
     }
 
@@ -57,6 +63,10 @@ class PrizeWheelUserResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('event.name')
+                    ->label('Sự kiện')
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('phone')
                     ->label('Số điện thoại')
                     ->searchable()

@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\PrizeWheelEventResource;
 use App\Filament\Resources\PrizeWheelResource;
 use App\Filament\Resources\PrizeWheelSettingResource;
 use App\Filament\Resources\PrizeWheelUserResource;
@@ -53,6 +54,7 @@ class AdminPanelProvider extends PanelProvider
                             ...PrizeWheelResource::getNavigationItems(),
                             ...PrizeWheelUserResource::getNavigationItems(),
                             ...PrizeWheelSettingResource::getNavigationItems(),
+                            ...PrizeWheelEventResource::getNavigationItems(),
                         ]),
                 ]);
             })

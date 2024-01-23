@@ -27,12 +27,19 @@ class PrizeWheelSettingResource extends Resource
             ->schema([
                 Forms\Components\Section::make('Thông tin cài đặt')
                     ->schema([
-                        Forms\Components\FileUpload::make('facebook_state')
-                            ->label('Facebook State file')
+                        Forms\Components\FileUpload::make('background_pc')
+                            ->label('Hình nền cho máy tính')
                             ->required(),
-                        Forms\Components\Checkbox::make('auto_messenger')
-                            ->label('Tự động gửi tin nhắn')
-                            ->default(false),
+                        Forms\Components\FileUpload::make('background_mobile')
+                            ->label('Hình nền cho điện thoại')
+                            ->required(),
+                        Forms\Components\FileUpload::make('background_wheel')
+                            ->label('Hình nền cho vòng quay')
+                            ->required(),
+                        Forms\Components\Select::make('event_id')
+                            ->relationship('event', 'name')
+                            ->label('Sự kiện')
+                            ->required(),
                     ]),
             ]);
     }
@@ -41,12 +48,28 @@ class PrizeWheelSettingResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('facebook_state')
-                    ->label('Facebook Access Token')
+                Tables\Columns\ImageColumn::make('background_pc')
+                    ->label('Hình nền cho máy tính')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\BooleanColumn::make('auto_messenger')
-                    ->label('Tuỳ chọn tự động gửi tin nhắn')
+                Tables\Columns\ImageColumn::make('background_mobile')
+                    ->label('Hình nền cho điện thoại')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\ImageColumn::make('background_wheel')
+                    ->label('Hình nền cho vòng quay')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('event.name')
+                    ->label('Sự kiện')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Ngày tạo')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Ngày cập nhật')
                     ->searchable()
                     ->sortable(),
             ])
@@ -57,11 +80,12 @@ class PrizeWheelSettingResource extends Resource
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\ViewAction::make(),
+                    Tables\Actions\DeleteAction::make(),
                 ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-//                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

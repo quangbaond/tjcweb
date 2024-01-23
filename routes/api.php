@@ -20,6 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('v1')->group(function () {
     Route::get('prize-wheel', [\App\Http\Controllers\Api\V1\PrizeWheelController::class, 'index']);
     Route::post('prize-wheel', [\App\Http\Controllers\Api\V1\PrizeWheelController::class, 'store']);
-
     Route::get('prize-check-user/{phone}', [\App\Http\Controllers\Api\V1\PrizeWheelController::class, 'checkUser']);
+    Route::get('prize-event/{slug}', [\App\Http\Controllers\Api\V1\PrizeWheelController::class, 'getEvent']);
 });
