@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('tjc.home')->middleware('localization');
 // change language
 Route::get('/language/{language}', [\App\Http\Controllers\LanguageController::class, 'LanguageSwitch'])->name('tjc.language');
-// webhook messenger
-Route::get('/webhook', [\App\Http\Controllers\WebhookController::class, 'verify'])->name('tjc.webhook');
+Route::get('/jewelry/{category}', [\App\Http\Controllers\ProductController::class, 'category'])->name('tjc.jewelry');
+Route::get('/jewelry/{category}/{subCategory}', [\App\Http\Controllers\ProductController::class, 'subCategory'])->name('tjc.jewelry.subCategory');
+//Route::get('/jewelry/{category}/{subCategory}/{product}', [\App\Http\Controllers\ProductController::class, 'show'])->name('tjc.product.show');
+Route::get('/promotion', [\App\Http\Controllers\PromotionController::class, 'index'])->name('tjc.promotion');
 
-//callback login facebook
-Route::get('/callback', [\App\Http\Controllers\WebhookController::class, 'verify'])->name('tjc.callback');

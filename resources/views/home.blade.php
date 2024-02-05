@@ -9,9 +9,13 @@
 @section('js')
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 
-
-
     <script src="{{ asset('assets/js/home.js') }}"></script>
+@endsection
+
+@section('banner')
+    <div class="banner ">
+        <img class="w-full max-h-[454px]" src="{{ asset('assets/images/banners/banner.png') }}" alt="banner" srcset="{{ asset('assets/images/banners/banner.png') }}">
+    </div>
 @endsection
 @section('content')
     <div class="md:max-w-screen-md flex-wrap items-center justify-between mx-auto md:my-20 container my-5 ">
